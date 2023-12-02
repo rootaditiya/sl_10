@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+            let word = 'apple';
+            $.ajax({
+                type: 'GET',
+                url: `https://dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=a8375614-d092-479f-9667-18a09f28da29`,
+                data: {},
+                success: function(response) {
+                    console.log(response);
+                    let definitions = response[0].shortdef;
+                    let temp_html = '';
+                    for (let i = 0; i < definitions.length; i++) {
+                        let def = definitions[i];
+                        temp_html += `<li>${def}</li>`;
+                    }
+                    $('#definitions').append(temp_html);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <ul id="definitions"></ul>
+</body>
+</html>
