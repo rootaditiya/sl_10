@@ -1,3 +1,7 @@
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
+
 from flask import (
 	Flask,
 	request,
@@ -12,11 +16,17 @@ import requests
 from datetime import datetime
 from bson import ObjectId
 
-app = Flask(__name__)
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
-password = 'sparta'
-client = MongoClient(f'mongodb://ditiya:{password}@ac-rcamlhi-shard-00-00.rc6xlci.mongodb.net:27017,ac-rcamlhi-shard-00-01.rc6xlci.mongodb.net:27017,ac-rcamlhi-shard-00-02.rc6xlci.mongodb.net:27017/?ssl=true&replicaSet=atlas-7keaa1-shard-0&authSource=admin&retryWrites=true&w=majority')
-db = client.dbsparta_plus_week2
+MONGODB_URI = os.environ.get("MONGODB_URI")
+DB_NAME =  os.environ.get("DB_NAME")
+
+client = MongoClient(MONGODB_URI)
+
+db = client[DB_NAME]
+
+app = Flask(__name__)
 
 @app.route('/')
 def main():
@@ -123,7 +133,6 @@ def get_ex():
 def save_ex():
 	word = request.form.get('word')
 	example = request.form.get('example')
-	example = str(example)
 	doc ={
 		'word': word,
 		'example': example,
